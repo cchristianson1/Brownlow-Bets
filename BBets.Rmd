@@ -1,0 +1,83 @@
+---
+title: "Brownlows Bets"
+author: "Corie Christianson"
+date: "Year 2019"
+output: 
+  html_document:
+    number_sections: true
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### `r as.character(Sys.Date())`
+
+```{r include=FALSE,echo=FALSE}
+require(tidyverse)
+if(!require("imager")) {install.packages("imager");require("imager")}
+
+```
+
+```{r echo=FALSE,out.width='100%'}
+xx<-getwd()
+Drive_ltr <- strtrim(xx,2)
+yy <- str_glue("{Drive_ltr}\\AAA_Owner_Info\\My_photo.jpg")
+my_pict <- load.image(yy)
+plot(my_pict,axes=FALSE,main="I'm Confused")
+```
+
+<!-- We recommend you use git branches -- create a separate branch for each major section i.e. Introduction, Methods, Results, Inferential Results, and Discussion and Conclusions - leave the YAML block untouched until the final merge where you put in your own name !-->
+
+# Introduction
+
+<!--In this section you explain what you are trying to show.  Where did the data come from?  What is the research or other question you are trying to answer?!-->
+
+ At the first day of class there are 35 students in Math Statistics class and professor Brownlow always proposes this bet to his students "I will wager $2 to your bet of $1 that at least two people in today's class have  the same birthday.  He tells me he has made that bet 1137 times so far. Where do you think his profits are? Discuss this in a markdown document
+
+# Methods
+
+<!--Decide on your methods:  In this section explain the approach you will take to attack the issue --- how will you decide on a likely estimate of professor Brownlow's earnings or losses after 1137 bets. Also explain how you construct a 95% confidence interval about your estimate of his winnings !--> 
+We will construct a variety store to show Brownlow's earnings. to show the .95 of his earnings, we just have to take from .25 to the .95 off of our histogram. Number represent peoples birthdays. We're going to sample with replacement. So if we pick 35 numbers its like picking 35 people. We repeat this 1135 times. If our duplicated sample is over 0 then Brownlow wins $1, but if it is not over 0 then Brownlow loses $2. In the end once we've done it 1135 times we'll see how much Brownlow ends up profiting. We're interested in finding the middle 95% of that stuff.
+
+#Profit Estimate
+
+<!--Explain and display the results of your method of coming up with the estimate of professor Brownlows betting!-->
+```{r}
+days=1:365
+count=1135
+repeatn=1000
+varstor=numeric()
+for (j in 1:repeatn){
+brownlow = 0
+for (i in 1:count) {
+  sam=sample(days,size=35,replace = T)
+  y=duplicated(sam)
+  if (sum(y)>0) brownlow=brownlow+1
+  else brownlow = brownlow - 2
+}
+varstor[j]=brownlow
+}
+hist(varstor)
+var(varstor)
+```
+
+
+# Confidence interval of Brownlows earning
+
+<!--Explain and display your method of coming up with a 95% confidence interval of  professor Brownlows-->
+
+In order to come up with the 95% interval we need to sort varstor. After we sort varstor we take the lowest interval "25" and the highest interval "975". The low and high interval will not always be the same, but for this interval the low was 424 and the high was 589. If we ran our initial r block and then ran the svarstor block again, the results would be close to the same, but not the same.
+```{r}
+svarstor <- sort(varstor) 
+low = svarstor [25] 
+high = svarstor [975]
+```
+
+
+# Discussion and Conclusion
+
+<!--Discussion and conclusion here.  If professor Brownlow is consistantly making or losing money how could he change his payout so that his profits center on zero?  Also discuss what size his class should be in order to have his current scheme balance at zero profit.!-->
+
+For professor Brownlow to center his profits on 0, he would probably need to decrease his bet down to $1 instead of $2, or increase his bet to $3 instead of $2. His class size would need to be either bigger to increase his chances of winning, and smaller to decrease his chances of winning. To keep his balance at a zero profit, he'd need to keep the same class size.
+
